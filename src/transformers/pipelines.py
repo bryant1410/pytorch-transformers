@@ -259,11 +259,7 @@ class PipelineDataFormat:
     SUPPORTED_FORMATS = ["json", "csv", "pipe"]
 
     def __init__(
-        self,
-        output_path: Optional[str],
-        input_path: Optional[str],
-        column: Optional[str],
-        overwrite: bool = False,
+        self, output_path: Optional[str], input_path: Optional[str], column: Optional[str], overwrite: bool = False,
     ):
         self.output_path = output_path
         self.input_path = input_path
@@ -316,11 +312,7 @@ class PipelineDataFormat:
 
     @staticmethod
     def from_str(
-        format: str,
-        output_path: Optional[str],
-        input_path: Optional[str],
-        column: Optional[str],
-        overwrite=False,
+        format: str, output_path: Optional[str], input_path: Optional[str], column: Optional[str], overwrite=False,
     ) -> "PipelineDataFormat":
         """
         Creates an instance of the right subclass of :class:`~transformers.pipelines.PipelineDataFormat` depending on
@@ -364,11 +356,7 @@ class CsvPipelineDataFormat(PipelineDataFormat):
     """
 
     def __init__(
-        self,
-        output_path: Optional[str],
-        input_path: Optional[str],
-        column: Optional[str],
-        overwrite=False,
+        self, output_path: Optional[str], input_path: Optional[str], column: Optional[str], overwrite=False,
     ):
         super().__init__(output_path, input_path, column, overwrite=overwrite)
 
@@ -409,11 +397,7 @@ class JsonPipelineDataFormat(PipelineDataFormat):
     """
 
     def __init__(
-        self,
-        output_path: Optional[str],
-        input_path: Optional[str],
-        column: Optional[str],
-        overwrite=False,
+        self, output_path: Optional[str], input_path: Optional[str], column: Optional[str], overwrite=False,
     ):
         super().__init__(output_path, input_path, column, overwrite=overwrite)
 
@@ -676,10 +660,7 @@ class Pipeline(_ScikitCompat):
         # Parse arguments
         inputs = self._args_parser(*args, **kwargs)
         inputs = self.tokenizer(
-            inputs,
-            add_special_tokens=add_special_tokens,
-            return_tensors=self.framework,
-            padding=padding,
+            inputs, add_special_tokens=add_special_tokens, return_tensors=self.framework, padding=padding,
         )
 
         return inputs
@@ -1452,10 +1433,7 @@ class TokenClassificationPipeline(Pipeline):
             with self.device_placement():
 
                 tokens = self.tokenizer(
-                    sentence,
-                    return_attention_mask=False,
-                    return_tensors=self.framework,
-                    truncation=True,
+                    sentence, return_attention_mask=False, return_tensors=self.framework, truncation=True,
                 )
 
                 # Forward
@@ -2021,9 +1999,7 @@ class SummarizationPipeline(Pipeline):
                 )
 
             summaries = self.model.generate(
-                inputs["input_ids"],
-                attention_mask=inputs["attention_mask"],
-                **generate_kwargs,
+                inputs["input_ids"], attention_mask=inputs["attention_mask"], **generate_kwargs,
             )
 
             results = []
@@ -2033,9 +2009,7 @@ class SummarizationPipeline(Pipeline):
                     record["summary_token_ids"] = summary
                 if return_text:
                     record["summary_text"] = self.tokenizer.decode(
-                        summary,
-                        skip_special_tokens=True,
-                        clean_up_tokenization_spaces=clean_up_tokenization_spaces,
+                        summary, skip_special_tokens=True, clean_up_tokenization_spaces=clean_up_tokenization_spaces,
                     )
                 results.append(record)
             return results
@@ -2131,9 +2105,7 @@ class TranslationPipeline(Pipeline):
                 )
 
             translations = self.model.generate(
-                inputs["input_ids"],
-                attention_mask=inputs["attention_mask"],
-                **generate_kwargs,
+                inputs["input_ids"], attention_mask=inputs["attention_mask"], **generate_kwargs,
             )
             results = []
             for translation in translations:
@@ -2226,9 +2198,7 @@ class Text2TextGenerationPipeline(Pipeline):
                 inputs = self.ensure_tensor_on_device(**inputs)
 
             generations = self.model.generate(
-                inputs["input_ids"],
-                attention_mask=inputs["attention_mask"],
-                **generate_kwargs,
+                inputs["input_ids"], attention_mask=inputs["attention_mask"], **generate_kwargs,
             )
             results = []
             for generation in generations:
@@ -2466,9 +2436,7 @@ class ConversationalPipeline(Pipeline):
                     "You might consider trimming the early phase of the conversation".format(input_length, max_length)
                 )
             generated_responses = self.model.generate(
-                inputs["input_ids"],
-                attention_mask=inputs["attention_mask"],
-                **generate_kwargs,
+                inputs["input_ids"], attention_mask=inputs["attention_mask"], **generate_kwargs,
             )
 
             cleaned_history = self._clean_padding_history(generated_responses)
